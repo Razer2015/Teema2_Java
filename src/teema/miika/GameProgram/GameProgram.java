@@ -41,7 +41,7 @@ public class GameProgram {
 
                 moves++;
 
-                if (moves % 1000 == 0)
+                if (moves % 100 == 0)
                     System.out.println("Penalties after " + moves + " moves: " + getTotalPenalty());
 
                 if (getTotalPenalty() <= 0) break;
