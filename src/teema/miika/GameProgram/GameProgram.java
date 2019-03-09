@@ -67,7 +67,7 @@ public class GameProgram {
 
         for (int i = 0; i <= _teamCount; i++) {
             for (int y = i + 1; y <= _teamCount - 1; y++) {
-/*                // Home game
+                // Home game
                 List<Round> unfilledRounds = getUnfilledRounds();
                 int random = rand.nextInt(unfilledRounds.size());
                 Round round = unfilledRounds.get(random);
@@ -77,14 +77,14 @@ public class GameProgram {
                 unfilledRounds = getUnfilledRounds();
                 random = rand.nextInt(unfilledRounds.size());
                 round = unfilledRounds.get(random);
-                round.Matches.add(new Match(y, i));*/
-
+                round.Matches.add(new Match(y, i));
+/*
                 int random = rand.nextInt(_rounds.length);
                 Round round = _rounds[random];
                 round.Matches.add(new Match(i, y));
                 random = rand.nextInt(_rounds.length);
                 round = _rounds[random];
-                round.Matches.add(new Match(y, i));
+                round.Matches.add(new Match(y, i));*/
             }
         }
 
