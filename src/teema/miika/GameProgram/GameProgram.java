@@ -10,11 +10,12 @@ public class GameProgram {
     Round[] _rounds;
     TabuList _tabuList;
     int _totalMoves = 0;
+    SA _simulatedAnnealing;
 
     public GameProgram(int teamCount) {
         _teamCount = teamCount;
 
-        int giveUp = 10;
+        int giveUp = 100;
         while (giveUp-- > 0) {
             initGames();
 
@@ -33,9 +34,14 @@ public class GameProgram {
                 Match worstMatch = getWorstMatch(round);
                 if (worstMatch == null) break;
                 round = moveToBestRound(worstMatch);
+                if (round == -1) {
+                    while (round == -1)
+                        round = moveToBestRound(getFirstMove());
+                }
+
                 moves++;
 
-                if (moves % 10 == 0)
+                if (moves % 1000 == 0)
                     System.out.println("Penalties after " + moves + " moves: " + getTotalPenalty());
 
                 if (getTotalPenalty() <= 0) break;
@@ -61,6 +67,7 @@ public class GameProgram {
         _totalMoves = 0;
         _tabuList = new TabuList();
         _rounds = new Round[_teamCount % 2 == 0 ? (_teamCount - 1) * 2 : _teamCount * 2];
+        _simulatedAnnealing = new SA(_rounds.length, 10);
         for (int i = 0; i < _rounds.length; i++) {
             _rounds[i] = new Round(_teamCount);
         }
@@ -176,7 +183,12 @@ public class GameProgram {
 
         // <Round, Penalties>
         List<Pair<Integer, Integer>> mins = getMinimumRoundPenalty(penaltys);
-        int bestRound = mins.get(rand.nextInt( mins.size())).getLeft();
+        Pair<Integer, Integer> randomMin = mins.get(rand.nextInt( mins.size()));
+        int bestRound = randomMin.getLeft();
+
+        _simulatedAnnealing.calcNewProb();
+        if (totalPenaltyBefore < randomMin.getRight() && !_simulatedAnnealing.accept())
+            return -1;
 
         moveRound(roundId, bestRound, match);
 
