@@ -1,10 +1,12 @@
 package teema.miika.GameProgram;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class GameProgram {
+    private final String _scheduleFile = "gameSchedule.txt";
     static Random rand = new Random();
     int _teamCount;
     Round[] _rounds;
@@ -44,9 +46,9 @@ public class GameProgram {
             if (getTotalPenalty() <= 0) {
                 System.out.println();
                 System.out.println("Success with " + _totalMoves + " moves");
+                saveGame();
                 printGame();
                 break;
-                //SaveGame();
             }
             System.out.println(getTotalPenalty());
             System.out.println("Attempt failed");
@@ -207,8 +209,8 @@ public class GameProgram {
     ///     Print the game result
     /// </summary>
     private void printGame() {
-        //Console.WriteLine("0 0 0");
-        //Console.WriteLine("0 0 0");
+        //System.out.println("0 0 0");
+        //System.out.println("0 0 0");
 
         for (int i = 0; i < _rounds.length; i++) {
             List<Match> matches = _rounds[i].Matches;
@@ -220,12 +222,50 @@ public class GameProgram {
         }
     }
 
+    /// <summary>
+    ///     Save the game results to a file
+    /// </summary>
+    private void saveGame() {
+        try {
+            PrintWriter bw = new PrintWriter(new FileWriter(_scheduleFile));
+
+            // Kaikki virheet | Hard virheet | Soft virheet
+            bw.print("0 0 0");
+            bw.println();
+            // Pelatut virheet | Kotiesto virheet | Vierasesto virheet
+            bw.print("0 0 0");
+            bw.println();
+
+            for (int i = 0; i < _rounds.length; i++) {
+                List<Match> matches = _rounds[i].Matches;
+                for (int y = 0; y < matches.size(); y++) {
+                    Match match = matches.get(y);
+
+                    // Pelatut virheet | Kotiesto virheet | Vierasesto virheet
+                    bw.print((i + 1));
+                    bw.print(" ");
+                    bw.print((match.Home + 1));
+                    bw.print(" ");
+                    bw.print((match.Visitor + 1));
+                    bw.println();
+                }
+            }
+
+            bw.close();
+
+            System.out.println("GameSchedule written to: " + _scheduleFile);
+        }
+        catch (IOException ioException) {
+            System.out.println("Error writing the gameSchedule.txt");
+            System.out.println(ioException.getMessage());
+        }
+    }
 
 
     private List<Round> getUnfilledRounds(){
         List<Round> rounds = new ArrayList<>();
         for (int i = 0; i < _rounds.length; i++) {
-            if (_rounds[i].Matches.size() < 6)
+            if (_rounds[i].Matches.size() < _teamCount / 2)
                 rounds.add(_rounds[i]);
         }
         return rounds;
