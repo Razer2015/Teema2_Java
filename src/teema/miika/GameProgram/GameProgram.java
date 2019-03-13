@@ -237,7 +237,7 @@ public class GameProgram {
     private List<Round> getUnfilledRounds(){
         List<Round> rounds = new ArrayList<>();
         for (int i = 0; i < _rounds.length; i++) {
-            if (_rounds[i].Matches.size() < 6)
+            if (_rounds[i].Matches.size() < _teamCount / 2)
                 rounds.add(_rounds[i]);
         }
         return rounds;
