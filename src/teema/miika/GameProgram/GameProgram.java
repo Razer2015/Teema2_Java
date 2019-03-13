@@ -241,7 +241,7 @@ public class GameProgram {
                 for (int y = 0; y < matches.size(); y++) {
                     Match match = matches.get(y);
 
-                    // Pelatut virheet | Kotiesto virheet | Vierasesto virheet
+                    // Kierros | Koti joukkue | Vieras joukkue
                     bw.print((i + 1));
                     bw.print(" ");
                     bw.print((match.Home + 1));
